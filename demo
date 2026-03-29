@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图图的客服系统demo</title>
+    <style>
+        #dify-chatbot-bubble-button {
+            background-color: #1C64F2 !important;
+        }
+        #dify-chatbot-bubble-window {
+            width: 24rem !important;
+            height: 40rem !important;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #1C64F2, #6366F1, #A855F7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 4px 20px rgba(28, 100, 242, 0.3);
+            animation: textGlow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes textGlow {
+            from {
+                filter: drop-shadow(0 0 10px rgba(28, 100, 242, 0.5));
+            }
+            to {
+                filter: drop-shadow(0 0 20px rgba(28, 100, 242, 0.8));
+            }
+        }
+        
+        .subtitle {
+            font-size: 1.25rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+        
+        .feature-section {
+            padding: 80px 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #1C64F2, #6366F1);
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .chatbot-guide {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            max-width: 250px;
+            z-index: 2147483639;
+            animation: slideIn 0.5s ease-out, pulse 2s infinite;
+            border: 1px solid rgba(28, 100, 242, 0.2);
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            }
+            50% {
+                box-shadow: 0 12px 35px rgba(28, 100, 242, 0.3);
+            }
+        }
+        
+        .chatbot-guide::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 20px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid rgba(255, 255, 255, 0.95);
+        }
+        
+        .chatbot-guide h4 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .chatbot-guide p {
+            font-size: 0.875rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .guide-arrow {
+            position: absolute;
+            bottom: -40px;
+            right: 30px;
+            width: 20px;
+            height: 20px;
+            background: #1C64F2;
+            border-radius: 50%;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        .guide-arrow::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            border-left: 2px solid white;
+            border-bottom: 2px solid white;
+            transform: translate(-50%, -50%) rotate(-45deg);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chatbot-guide {
+                bottom: 90px;
+                right: 20px;
+                max-width: 200px;
+                padding: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .chatbot-guide {
+                bottom: 80px;
+                right: 15px;
+                max-width: 180px;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="hero-content">
+                <h1>图图的客服系统demo</h1>
+                <p class="subtitle">欢迎使用我们的智能客服系统，随时为您提供专业的服务和支持</p>
+            </div>
+        </header>
+        
+        <section class="feature-section">
+            <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 40px; color: #333;">核心功能</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3>智能对话</h3>
+                    <p>采用先进的人工智能技术，提供自然流畅的对话体验，快速解决您的问题</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>即时响应</h3>
+                    <p>7x24小时全天候服务，即时响应您的咨询，无需等待</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>精准解答</h3>
+                    <p>基于深度学习算法，为您提供准确、个性化的解决方案</p>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <!-- 客服系统引导提示 -->
+    <div class="chatbot-guide">
+        <h4>需要帮助？</h4>
+        <p>点击右下角的蓝色聊天气泡，我们的智能客服随时为您服务</p>
+        <div class="guide-arrow"></div>
+    </div>
+
+    <!--
+      Dify 嵌入说明：
+      1. 请勿用「双击打开文件」方式访问（file://），否则常与 udify.app 无法联通。请用本地 HTTP 服务打开，例如在项目目录执行：npx --yes serve -p 3000
+         然后浏览器访问 http://127.0.0.1:3000
+      2. 应用需在 Dify 后台「发布」后嵌入才可用；若工作流「开始」节点有必填变量，请在下方 inputs 中填写对应键值。
+      3. 若使用自建 Dify，请取消注释并填写 baseUrl 为你的实例地址（并注释掉云端的 baseUrl）。
+    -->
+    <script>
+        window.difyChatbotConfig = {
+            token: 'LgCyWIEO8Z1XtwJe',
+            isDev: false,
+            baseUrl: 'https://udify.app',
+            inputs: {
+                // 若编排里「开始」节点定义了变量，在此按变量名传值，例如：name: '访客'
+            },
+            systemVariables: {
+                // user_id: '可选',
+                // conversation_id: '可选，须为合法 UUID',
+            },
+            userVariables: {
+                // avatar_url: '可选',
+                // name: '可选',
+            },
+        };
+    </script>
+    <script src="https://udify.app/embed.min.js" id="LgCyWIEO8Z1XtwJe"></script>
+</body>
+</html>
